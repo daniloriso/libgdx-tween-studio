@@ -1,0 +1,3 @@
+syntax: glob
+LGDX-TweenStudio-lib/*
+LGDX-TweenStudio-test/*
