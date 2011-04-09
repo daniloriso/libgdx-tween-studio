@@ -1,5 +1,7 @@
 package aurelienribon.tweenstudio;
 
+import aurelienribon.tweenstudio.elements.TweenStudioObjectState;
+import aurelienribon.tweenstudio.elements.TweenStudioObject;
 import aurelienribon.libgdx.tween.Tween;
 import aurelienribon.libgdx.tween.TweenEquation;
 import aurelienribon.libgdx.tween.TweenSequence;
@@ -18,12 +20,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
 class MainWindow extends javax.swing.JFrame {
-	private Editor editor;
+	private final TweenStudio studio;
 	private DefaultListModel objectListModel;
 	private TimelineTableModel timelineTableModel;
 	private ExportWindow exportWindow;
+	private TweenSequence playSequence;
 
-    public MainWindow() {
+    public MainWindow(final TweenStudio studio) {
 		Locale.setDefault(Locale.ENGLISH);
         initComponents();
 
@@ -54,15 +57,38 @@ class MainWindow extends javax.swing.JFrame {
 			public void windowClosing(WindowEvent e) {
 				if (exportWindow != null)
 					exportWindow.dispose();
+				studio.close();
 			}
 		});
+		
+		this.studio = studio;
+		setObjects(studio.getObjectNames());
+		setTimeline(studio.getCorrectedTimeline());
     }
 
-	public void setEditor(Editor editor) {
-		this.editor = editor;
-		setTimeline(editor.getCorrectedTimeline());
-		setTweenables(editor.getObjectNames());
+	public TweenStudioObject getSelectionObject() {
+		int index = tl_timeline_table.getSelectedRow();
+		if (index < 0)
+			return null;
+		return (TweenStudioObject) timelineTableModel.get(index).getTarget();
 	}
+
+	public int getSelectionTweenType() {
+		int index = tl_timeline_table.getSelectedRow();
+		if (index < 0)
+			return -1;
+		return timelineTableModel.get(index).getTweenType();
+	}
+
+	public void updateSelectionValues(float[] newValues) {
+		int index = tl_timeline_table.getSelectedRow();
+		assert index >= 0;
+		sel_targetValue1_nud.setValue(newValues[0]);
+		sel_targetValue2_nud.setValue(newValues[1]);
+		sel_targetValue3_nud.setValue(newValues[2]);
+	}
+
+	// -------------------------------------------------------------------------
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -98,6 +124,7 @@ class MainWindow extends javax.swing.JFrame {
         new_actionRotation_chk = new javax.swing.JRadioButton();
         new_actionScale_chk = new javax.swing.JRadioButton();
         new_actionOpacity_chk = new javax.swing.JRadioButton();
+        jLabel9 = new javax.swing.JLabel();
         new_create_btn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         tl_playAll_btn = new javax.swing.JButton();
@@ -224,7 +251,7 @@ class MainWindow extends javax.swing.JFrame {
                     .addComponent(sel_delay_nud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jTextPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(editionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sel_delete_btn)
                     .addComponent(sel_update_btn))
@@ -248,10 +275,10 @@ class MainWindow extends javax.swing.JFrame {
         new_actions_panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Actions"));
 
         new_actiongroup_btnGrp.add(new_actionOrigin_chk);
-        new_actionOrigin_chk.setSelected(true);
-        new_actionOrigin_chk.setText("Tween origin");
+        new_actionOrigin_chk.setText("Tween origin (*)");
 
         new_actiongroup_btnGrp.add(new_actionPosition_chk);
+        new_actionPosition_chk.setSelected(true);
         new_actionPosition_chk.setText("Tween position");
 
         new_actiongroup_btnGrp.add(new_actionRotation_chk);
@@ -263,36 +290,42 @@ class MainWindow extends javax.swing.JFrame {
         new_actiongroup_btnGrp.add(new_actionOpacity_chk);
         new_actionOpacity_chk.setText("Tween opacity");
 
+        jLabel9.setText("(*) Expert feature, be careful");
+
         javax.swing.GroupLayout new_actions_panelLayout = new javax.swing.GroupLayout(new_actions_panel);
         new_actions_panel.setLayout(new_actions_panelLayout);
         new_actions_panelLayout.setHorizontalGroup(
             new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(new_actions_panelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(new_actions_panelLayout.createSequentialGroup()
                         .addGroup(new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(new_actionOrigin_chk)
-                            .addComponent(new_actionPosition_chk))
-                        .addGap(29, 29, 29)
+                            .addComponent(new_actionPosition_chk)
+                            .addComponent(new_actionRotation_chk))
+                        .addGap(18, 18, 18)
                         .addGroup(new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(new_actionOpacity_chk)
-                            .addComponent(new_actionScale_chk)))
-                    .addComponent(new_actionRotation_chk))
-                .addContainerGap(38, Short.MAX_VALUE))
+                            .addComponent(new_actionOrigin_chk)))
+                    .addComponent(new_actionScale_chk)
+                    .addComponent(jLabel9))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         new_actions_panelLayout.setVerticalGroup(
             new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(new_actions_panelLayout.createSequentialGroup()
-                .addGroup(new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(new_actionOrigin_chk)
-                    .addComponent(new_actionScale_chk))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, new_actions_panelLayout.createSequentialGroup()
                 .addGroup(new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(new_actionPosition_chk)
                     .addComponent(new_actionOpacity_chk))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(new_actionRotation_chk)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGroup(new_actions_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(new_actionRotation_chk)
+                    .addComponent(new_actionOrigin_chk))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(new_actionScale_chk)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addContainerGap())
         );
 
         new_create_btn.setText("Insert new tween");
@@ -320,7 +353,7 @@ class MainWindow extends javax.swing.JFrame {
             .addGroup(creationPanelLayout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(new_actions_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -425,11 +458,11 @@ class MainWindow extends javax.swing.JFrame {
 
 	private void new_create_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_create_btnActionPerformed
 		String targetName = new_objects_list.getSelectedValue().toString();
-		TweenStudioObject target = editor.getObjectFromName(targetName);
+		TweenStudioObject target = studio.getObjectFromName(targetName);
 		TweenStudioObjectState state = TweenStudioObjectState.fromObject(target);
 
 		// Get the current state of the tweened object (to add a neutral tween)
-		int tweenType = getSelectedTweenType();
+		int tweenType = getCreationSelectedTweenType();
 		float[] targetValues = new float[3];
 		target.getTweenValues(tweenType, targetValues);
 
@@ -450,7 +483,9 @@ class MainWindow extends javax.swing.JFrame {
 		int index = tl_timeline_table.getSelectedRow();
 		timelineTableModel.remove(index);
 		if (timelineTableModel.getRowCount() > 0)
-			tl_timeline_table.setRowSelectionInterval(index > 0 ? index-1 : 0, index > 0 ? index-1 : 0);
+			tl_timeline_table.setRowSelectionInterval(
+				Math.min(index, timelineTableModel.getRowCount()-1),
+				Math.min(index, timelineTableModel.getRowCount()-1));
 		else
 			tl_timeline_table.clearSelection();
 	}//GEN-LAST:event_sel_delete_btnActionPerformed
@@ -472,15 +507,18 @@ class MainWindow extends javax.swing.JFrame {
 			((Number)sel_targetValue3_nud.getValue()).floatValue()
 		).delay(((Number)sel_delay_nud.getValue()).intValue());
 
-		timelineTableModel.remove(index);
-		timelineTableModel.add(newTween, index);
+		timelineTableModel.replace(newTween, index);
 		tl_timeline_table.setRowSelectionInterval(index, index);
 	}//GEN-LAST:event_sel_update_btnActionPerformed
 
 	private void tl_playAll_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tl_playAll_btnActionPerformed
 		resetObjects();
 		Tween[] tweens = cloneTweens(timelineTableModel.getAll());
-		TweenSequence.set(tweens).start();
+
+		if (playSequence != null)
+			playSequence.kill();
+		playSequence = TweenSequence.set(tweens);
+		playSequence.start();
 	}//GEN-LAST:event_tl_playAll_btnActionPerformed
 
 	private void tl_playFromSelection_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tl_playFromSelection_btnActionPerformed
@@ -499,7 +537,7 @@ class MainWindow extends javax.swing.JFrame {
 		if (exportWindow != null)
 			exportWindow.dispose();
 		exportWindow = new ExportWindow();
-		exportWindow.setSequence(sequence, editor);
+		exportWindow.setSequence(sequence, studio);
 		exportWindow.setVisible(true);
 	}//GEN-LAST:event_tl_export_btnActionPerformed
 
@@ -514,6 +552,7 @@ class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextPane jTextPane1;
@@ -557,7 +596,7 @@ class MainWindow extends javax.swing.JFrame {
 		}
 	}
 
-	private void setTweenables(String[] sprites) {
+	private void setObjects(String[] sprites) {
 		objectListModel.clear();
 
 		for (String name : sprites)
@@ -583,7 +622,7 @@ class MainWindow extends javax.swing.JFrame {
 	}
 
 	private void updateSelectionPanel(Tween tween) {
-		sel_target_field.setText(editor.getNameFromObject((TweenStudioObject) tween.getTarget()));
+		sel_target_field.setText(studio.getNameFromObject((TweenStudioObject) tween.getTarget()));
 		sel_action_field.setText(TweenStudioObject.getTweenTypeDesc(tween.getTweenType()));
 		sel_equation_cbox.setSelectedItem(tween.getEquation() != null ? tween.getEquation().toString() : "???");
 		sel_duration_nud.setValue(tween.getDurationMillis());
@@ -621,7 +660,7 @@ class MainWindow extends javax.swing.JFrame {
 		}
 	}
 
-	private int getSelectedTweenType() {
+	private int getCreationSelectedTweenType() {
 		if (new_actionOpacity_chk.isSelected())
 			return TweenStudioObject.OPACITY;
 		if (new_actionOrigin_chk.isSelected())
@@ -644,9 +683,9 @@ class MainWindow extends javax.swing.JFrame {
 	}
 
 	private void resetObjects() {
-		for (TweenStudioObject tso : editor.getObjects()) {
-			TweenStudioObjectState state = editor.getInitState(tso);
-			tso.setToState(state);
+		for (TweenStudioObject tso : studio.getObjects()) {
+			TweenStudioObjectState state = studio.getInitState(tso);
+			state.applyToObject(tso);
 		}
 	}
 
@@ -695,7 +734,7 @@ class MainWindow extends javax.swing.JFrame {
 			}
 
 			switch (columnIndex) {
-				case 0: return editor.getNameFromObject((TweenStudioObject) tween.getTarget());
+				case 0: return studio.getNameFromObject((TweenStudioObject) tween.getTarget());
 				case 1: return TweenStudioObject.getTweenTypeDesc(tween.getTweenType());
 				case 2: return tween.getEquation() != null ? tween.getEquation().toString() : "???";
 				case 3: return targetValuesStr;
@@ -722,13 +761,19 @@ class MainWindow extends javax.swing.JFrame {
 			tweens.clear();
 		}
 
-		public void add(Tween desc, int index) {
-			tweens.add(index, desc);
+		public void add(Tween tween, int index) {
+			tweens.add(index, tween);
 			fireTableDataChanged();
 		}
 
 		public void remove(int index) {
 			tweens.remove(index);
+			fireTableDataChanged();
+		}
+
+		public void replace(Tween tween, int index) {
+			tweens.remove(index);
+			tweens.add(index, tween);
 			fireTableDataChanged();
 		}
 

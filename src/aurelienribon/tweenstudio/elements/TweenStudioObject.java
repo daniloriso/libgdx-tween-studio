@@ -1,4 +1,4 @@
-package aurelienribon.tweenstudio;
+package aurelienribon.tweenstudio.elements;
 
 import aurelienribon.libgdx.tween.Tweenable;
 
@@ -8,24 +8,6 @@ public abstract class TweenStudioObject implements Tweenable {
 	public static final int SCALE_XY = 3;
 	public static final int ROTATION = 4;
 	public static final int OPACITY = 5;
-
-	@Override
-	public int getTweenedAttributeCount(int tweenType) {
-		switch (tweenType) {
-			case ORIGIN_XY:
-			case POSITION_XY:
-			case SCALE_XY:
-				return 2;
-
-			case ROTATION:
-			case OPACITY:
-				return 1;
-
-			default:
-				assert false;
-				return 0;
-		}
-	}
 
 	public static String getTweenTypeDesc(int tweenType) {
 		switch (tweenType) {
@@ -49,11 +31,25 @@ public abstract class TweenStudioObject implements Tweenable {
 		}
 	}
 
-	protected void setToState(TweenStudioObjectState state) {
-		tweenUpdated(TweenStudioObject.OPACITY, state.opacity);
-		tweenUpdated(TweenStudioObject.ORIGIN_XY, state.origin);
-		tweenUpdated(TweenStudioObject.POSITION_XY, state.position);
-		tweenUpdated(TweenStudioObject.ROTATION, state.rotation);
-		tweenUpdated(TweenStudioObject.SCALE_XY, state.scale);
+	// -------------------------------------------------------------------------
+
+	@Override
+	public int getTweenedAttributeCount(int tweenType) {
+		switch (tweenType) {
+			case ORIGIN_XY:
+			case POSITION_XY:
+			case SCALE_XY:
+				return 2;
+
+			case ROTATION:
+			case OPACITY:
+				return 1;
+
+			default:
+				assert false;
+				return 0;
+		}
 	}
+
+	public abstract void getChangeFromUiMouseDown(int tweenType, float x, float y, float[] returnValues);
 }

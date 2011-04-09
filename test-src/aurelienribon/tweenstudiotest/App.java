@@ -2,13 +2,13 @@ package aurelienribon.tweenstudiotest;
 
 import aurelienribon.libgdx.tween.Tween;
 import aurelienribon.libgdx.tween.TweenSequence;
-import aurelienribon.libgdx.tween.equations.Cubic;
-import aurelienribon.tweenstudio.Editor;
+import aurelienribon.tweenstudio.TweenStudioEditor;
 import aurelienribon.tweenstudio.TweenStudio;
-import aurelienribon.tweenstudio.TweenStudioObject;
+import aurelienribon.tweenstudio.elements.TweenStudioObject;
 import aurelienribon.tweenstudio.tweenables.TweenableSprite;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -59,32 +59,8 @@ public class App implements ApplicationListener {
 		logoSpriteTween2 = new TweenableSprite(logoSprite2);
 		logoSpriteTween3 = new TweenableSprite(logoSprite3);
 
-		TweenStudio.edit(new Editor() {
-			@Override
-			public void getFieldNames(Map<TweenStudioObject, String> map) {
-				map.put(logoSpriteTween1, "logoSpriteTween1");
-				map.put(logoSpriteTween2, "logoSpriteTween2");
-				map.put(logoSpriteTween3, "logoSpriteTween3");
-			}
-
-			@Override
-			protected TweenSequence getTimeline() {
-				return TweenSequence.set(
-				);
-			}
-
-			@Override
-			protected void convertInputToPosition(Vector2 input) {
-				input.y = Gdx.graphics.getHeight() - input.y;
-
-				float metersPerPixel = SCREEN_WIDTH_METERS / Gdx.graphics.getWidth();
-				input.mul(metersPerPixel * camera.zoom);
-
-				float screenHeightMeters = SCREEN_WIDTH_METERS * (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
-				input.x += camera.position.x - SCREEN_WIDTH_METERS / 2 * camera.zoom;
-				input.y += camera.position.y - screenHeightMeters / 2 * camera.zoom;
-			}
-		});
+		TweenStudio studio = createStudio();
+		studio.edit();
 	}
 
 	@Override
@@ -117,5 +93,39 @@ public class App implements ApplicationListener {
 
 	@Override
 	public void dispose() {
+	}
+
+	// -------------------------------------------------------------------------
+
+	private TweenStudio createStudio() {
+		return new TweenStudio(
+			TweenSequence.set(),
+
+			new TweenStudioEditor() {
+				@Override protected void getFieldNames(Map<TweenStudioObject, String> map) {
+					map.put(logoSpriteTween1, "logoSpriteTween1");
+					map.put(logoSpriteTween2, "logoSpriteTween2");
+					map.put(logoSpriteTween3, "logoSpriteTween3");
+				}
+
+				@Override
+				protected InputProcessor getCurrentInputProcessor() {
+					return null;
+				}
+
+				@Override protected Vector2 getPositionFromInput(Vector2 inputPos) {
+					inputPos.y = Gdx.graphics.getHeight() - inputPos.y;
+
+					float metersPerPixel = SCREEN_WIDTH_METERS / Gdx.graphics.getWidth();
+					inputPos.mul(metersPerPixel * camera.zoom);
+
+					float screenHeightMeters = SCREEN_WIDTH_METERS * (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
+					inputPos.x += camera.position.x - SCREEN_WIDTH_METERS / 2 * camera.zoom;
+					inputPos.y += camera.position.y - screenHeightMeters / 2 * camera.zoom;
+
+					return inputPos;
+				}
+			}
+		);
 	}
 }

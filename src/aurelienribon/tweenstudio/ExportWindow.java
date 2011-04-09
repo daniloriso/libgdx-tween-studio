@@ -1,5 +1,6 @@
 package aurelienribon.tweenstudio;
 
+import aurelienribon.tweenstudio.elements.TweenStudioObject;
 import aurelienribon.libgdx.tween.Tween;
 import aurelienribon.libgdx.tween.TweenSequence;
 
@@ -10,13 +11,13 @@ public class ExportWindow extends javax.swing.JFrame {
 		setSize(500, 500);
     }
 
-	public void setSequence(TweenSequence sequence, Editor editor) {
+	public void setSequence(TweenSequence sequence, TweenStudio studio) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("TweenSequence.set(\n");
 		if (sequence.getTweens().size > 0) {
 			for (Tween tween : sequence.getTweens()) {
 				sb.append("\tTween.to(");
-				sb.append(editor.getNameFromObject((TweenStudioObject) tween.getTarget())).append(", ");
+				sb.append(studio.getNameFromObject((TweenStudioObject) tween.getTarget())).append(", ");
 				sb.append(TweenStudioObject.getTweenTypeName(tween.getTweenType())).append(", ");
 				sb.append(tween.getEquation().toString()).append(", ");
 				sb.append(tween.getDurationMillis()).append(", ");

@@ -157,7 +157,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jTextPane1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="80" max="32767" attributes="0"/>
+                  <EmptySpace pref="34" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="sel_delete_btn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="sel_update_btn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -326,7 +326,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="176" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="107" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="new_actions_panel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -384,40 +384,44 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="new_actionOrigin_chk" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="new_actionPosition_chk" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="new_actionPosition_chk" min="-2" max="-2" attributes="0"/>
+                                  <Component id="new_actionRotation_chk" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="new_actionOpacity_chk" min="-2" max="-2" attributes="0"/>
-                                  <Component id="new_actionScale_chk" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="new_actionOrigin_chk" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="new_actionRotation_chk" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="new_actionScale_chk" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="38" max="32767" attributes="0"/>
+                      <EmptySpace pref="29" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="new_actionOrigin_chk" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="new_actionScale_chk" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="new_actionPosition_chk" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="new_actionOpacity_chk" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="new_actionRotation_chk" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="new_actionRotation_chk" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="new_actionOrigin_chk" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="new_actionScale_chk" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
+                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -428,8 +432,7 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="new_actiongroup_btnGrp"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Tween origin"/>
+                <Property name="text" type="java.lang.String" value="Tween origin (*)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JRadioButton" name="new_actionPosition_chk">
@@ -437,6 +440,7 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="new_actiongroup_btnGrp"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Tween position"/>
               </Properties>
             </Component>
@@ -462,6 +466,11 @@
                   <ComponentRef name="new_actiongroup_btnGrp"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Tween opacity"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel9">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="(*) Expert feature, be careful"/>
               </Properties>
             </Component>
           </SubComponents>

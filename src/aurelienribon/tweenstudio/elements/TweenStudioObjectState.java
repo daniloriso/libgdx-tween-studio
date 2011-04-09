@@ -1,6 +1,6 @@
-package aurelienribon.tweenstudio;
+package aurelienribon.tweenstudio.elements;
 
-class TweenStudioObjectState {
+public class TweenStudioObjectState {
     public final float[] origin = new float[3];
     public final float[] position = new float[3];
     public final float[] scale = new float[3];
@@ -15,5 +15,13 @@ class TweenStudioObjectState {
 		tso.getTweenValues(TweenStudioObject.ROTATION, state.rotation);
 		tso.getTweenValues(TweenStudioObject.SCALE_XY, state.scale);
 		return state;
+	}
+
+	public void applyToObject(TweenStudioObject obj) {
+		obj.tweenUpdated(TweenStudioObject.OPACITY, opacity);
+		obj.tweenUpdated(TweenStudioObject.ORIGIN_XY, origin);
+		obj.tweenUpdated(TweenStudioObject.POSITION_XY, position);
+		obj.tweenUpdated(TweenStudioObject.ROTATION, rotation);
+		obj.tweenUpdated(TweenStudioObject.SCALE_XY, scale);
 	}
 }
