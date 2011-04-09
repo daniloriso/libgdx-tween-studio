@@ -64,6 +64,7 @@ class MainWindow extends javax.swing.JFrame {
 		this.studio = studio;
 		setObjects(studio.getObjectNames());
 		setTimeline(studio.getCorrectedTimeline());
+		tl_timeline_table.clearSelection();
     }
 
 	public TweenStudioObject getSelectionObject() {

@@ -2,8 +2,9 @@ package aurelienribon.tweenstudiotest;
 
 import aurelienribon.libgdx.tween.Tween;
 import aurelienribon.libgdx.tween.TweenSequence;
-import aurelienribon.tweenstudio.TweenStudioEditor;
+import aurelienribon.libgdx.tween.equations.Cubic;
 import aurelienribon.tweenstudio.TweenStudio;
+import aurelienribon.tweenstudio.TweenStudioEditor;
 import aurelienribon.tweenstudio.elements.TweenStudioObject;
 import aurelienribon.tweenstudio.tweenables.TweenableSprite;
 import com.badlogic.gdx.ApplicationListener;
@@ -99,7 +100,15 @@ public class App implements ApplicationListener {
 
 	private TweenStudio createStudio() {
 		return new TweenStudio(
-			TweenSequence.set(),
+			TweenSequence.set(
+				Tween.to(logoSpriteTween1, TweenStudioObject.POSITION_XY, Cubic.INOUT, 500, -1.0625f, 3.5625f).delay(0),
+				Tween.to(logoSpriteTween1, TweenStudioObject.SCALE_XY, Cubic.INOUT, 500, 0.3f, 0.3f).delay(-400),
+				Tween.to(logoSpriteTween1, TweenStudioObject.POSITION_XY, Cubic.INOUT, 800, -0.96875f, -5.96875f).delay(0),
+				Tween.to(logoSpriteTween1, TweenStudioObject.SCALE_XY, Cubic.INOUT, 800, 1.0f, 1.0f).delay(-600),
+				Tween.to(logoSpriteTween1, TweenStudioObject.POSITION_XY, Cubic.INOUT, 500, -1.0f, -1.0f).delay(0),
+				Tween.to(logoSpriteTween1, TweenStudioObject.SCALE_XY, Cubic.INOUT, 500, 3.53125f, 3.40625f).delay(-300),
+				Tween.to(logoSpriteTween1, TweenStudioObject.OPACITY, Cubic.INOUT, 500, 0.203125f).delay(-500)
+			),
 
 			new TweenStudioEditor() {
 				@Override protected void getFieldNames(Map<TweenStudioObject, String> map) {

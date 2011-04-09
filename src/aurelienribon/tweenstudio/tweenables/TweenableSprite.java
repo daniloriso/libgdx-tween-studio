@@ -71,13 +71,13 @@ public class TweenableSprite extends TweenStudioObject {
 	}
 
 	@Override
-	public void getChangeFromUiMouseDown(int tweenType, float x, float y, float[] returnValues) {
+	public void getChangeFromUiMouseDown(int tweenType, Vector2 pos, Vector2 lastPos, float[] returnValues) {
 		float centerX = sprite.getX() + sprite.getWidth()/2;
 		float centerY = sprite.getY() + sprite.getHeight()/2;
 
 		switch (tweenType) {
 			case OPACITY:
-				float dist = new Vector2(x - centerX, 0).len();
+				float dist = new Vector2(pos.x - centerX, 0).len();
 				float ret = dist / sprite.getWidth();
 				ret = ret > 1 ? 1 : ret;
 				ret = ret < 0 ? 0 : ret;
@@ -85,22 +85,24 @@ public class TweenableSprite extends TweenStudioObject {
 				break;
 
 			case ORIGIN_XY:
-				returnValues[0] = x - sprite.getX();
-				returnValues[1] = y - sprite.getY();
+				returnValues[0] = pos.x - sprite.getX();
+				returnValues[1] = pos.y - sprite.getY();
 				break;
 
 			case POSITION_XY:
-				returnValues[0] = x;
-				returnValues[1] = y;
+				returnValues[0] = sprite.getX() + pos.x - lastPos.x;
+				returnValues[1] = sprite.getY() + pos.y - lastPos.y;
 				break;
 
 			case ROTATION:
-				returnValues[0] = MathUtils.atan2(y - centerY, x - centerX) * MathUtils.radiansToDegrees;
+				float angle = MathUtils.atan2(pos.y - centerY, pos.x - centerX) * MathUtils.radiansToDegrees;
+				float lastAngle = MathUtils.atan2(lastPos.y - centerY, lastPos.x - centerX) * MathUtils.radiansToDegrees;
+				returnValues[0] = sprite.getRotation() + angle - lastAngle;
 				break;
 
 			case SCALE_XY:
-				returnValues[0] = (x - centerX) / (sprite.getWidth()/2);
-				returnValues[1] = (y - centerY) / (sprite.getHeight()/2);
+				returnValues[0] = (pos.x - centerX) / (sprite.getWidth()/2);
+				returnValues[1] = (pos.y - centerY) / (sprite.getHeight()/2);
 				break;
 
 			default: assert false;

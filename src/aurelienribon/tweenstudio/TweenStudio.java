@@ -55,15 +55,16 @@ public class TweenStudio {
 	// Package-only
 	// -------------------------------------------------------------------------
 
-	void processUiInput(float x, float y) {
-		Vector2 p = editor.getPositionFromInput(new Vector2(x, y));
+	void processUiInput(Vector2 pos, Vector2 lastPos) {
+		Vector2 convertedPos = editor.getPositionFromInput(pos.cpy());
+		Vector2 convertedLastPos = editor.getPositionFromInput(lastPos.cpy());
 		TweenStudioObject obj = window.getSelectionObject();
 		int tweenType = window.getSelectionTweenType();
 
 		if (obj != null) {
 			assert tweenType >= 0;
 			float[] newValues = new float[3];
-			obj.getChangeFromUiMouseDown(tweenType, p.x, p.y, newValues);
+			obj.getChangeFromUiMouseDown(tweenType, convertedPos, convertedLastPos, newValues);
 			obj.tweenUpdated(tweenType, newValues);
 			window.updateSelectionValues(newValues);
 		}

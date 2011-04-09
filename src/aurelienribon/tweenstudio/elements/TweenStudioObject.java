@@ -1,6 +1,7 @@
 package aurelienribon.tweenstudio.elements;
 
 import aurelienribon.libgdx.tween.Tweenable;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class TweenStudioObject implements Tweenable {
 	public static final int ORIGIN_XY = 1;
@@ -51,5 +52,5 @@ public abstract class TweenStudioObject implements Tweenable {
 		}
 	}
 
-	public abstract void getChangeFromUiMouseDown(int tweenType, float x, float y, float[] returnValues);
+	public abstract void getChangeFromUiMouseDown(int tweenType, Vector2 pos, Vector2 lastPos, float[] returnValues);
 }
