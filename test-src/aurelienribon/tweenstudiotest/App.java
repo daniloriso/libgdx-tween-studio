@@ -6,7 +6,7 @@ import aurelienribon.libgdx.tween.equations.Cubic;
 import aurelienribon.tweenstudio.TweenStudio;
 import aurelienribon.tweenstudio.TweenStudioEditor;
 import aurelienribon.tweenstudio.elements.TweenStudioObject;
-import aurelienribon.tweenstudio.tweenables.TweenableSprite;
+import aurelienribon.tweenstudio.elements.TweenableSprite;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
